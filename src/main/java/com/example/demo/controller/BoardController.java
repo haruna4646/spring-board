@@ -29,9 +29,9 @@ public class BoardController {
     @GetMapping
     public String list(@RequestParam(required = false) String keyword, Model model) {
         List<Board> boards =
-            (keyword == null || keyword.isEmpty())
-                ? boardService.findAll()
-                : boardService.search(keyword);
+                (keyword == null || keyword.isEmpty())
+                        ? boardService.findAll()
+                        : boardService.search(keyword);
 
         model.addAttribute("boards", boards);
         return "board/list";
