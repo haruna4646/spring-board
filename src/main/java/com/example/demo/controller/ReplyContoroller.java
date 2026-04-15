@@ -9,24 +9,24 @@ import com.example.demo.service.ReplyService;
 
 @Controller
 @RequestMapping("/replies")
-public class ReplyController {
+public class ReplyContoroller {
 
     private final ReplyService replyService;
 
-    public ReplyController(ReplyService replyService) {
+    public ReplyContoroller(ReplyService replyService) {
         this.replyService = replyService;
     }
 
     @PostMapping
     public String create(Reply reply) {
 
-        if (reply.getAuthor() == null || reply.getAuthor().isBlank()
-                || reply.getContent() == null || reply.getContent().isBlank()) {
+        // 簡易バリデーション
+        if (reply.getName() == null || reply.getName().isBlank()
+                || reply.getMessage() == null || reply.getMessage().isBlank()) {
             return "redirect:/boards";
         }
 
         replyService.save(reply);
-
         return "redirect:/boards";
     }
 }

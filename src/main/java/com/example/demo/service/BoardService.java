@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.BoardDto;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.BoardRepository;
 
@@ -16,28 +17,47 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    // 一覧取得
-    public List<Board> findAll() {
-        return boardRepository.findAll();
+    public List<BoardDto> findAll() {
+        return boardRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    // ID検索
-    public Board findById(Long id) {
-        return boardRepository.findById(id).orElse(null);
+    public List<BoardDto> search(String keyword) {
+        return boardRepository.findByTitleContaining(keyword)
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
-    // 保存（投稿）
-    public void save(Board board) {
+    public void save(BoardDto dto) {
+        Board board = toEntity(dto);
         boardRepository.save(board);
     }
 
-    // 削除
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
 
-    // タイトル検索
-    public List<Board> search(String keyword) {
-        return boardRepository.findByTitleContaining(keyword);
+    // ===== 変換処理 =====
+
+    private BoardDto toDto(Board board) {
+        BoardDto dto = new BoardDto();
+        dto.setId(board.getId());
+        dto.setTitle(board.getTitle());
+        dto.setContent(board.getContent());
+        dto.setAuthor(board.getAuthor());
+        dto.setCreatedAt(board.getCreatedAt());
+        dto.setUpdatedAt(board.getUpdatedAt());
+        return dto;
+    }
+
+    private Board toEntity(BoardDto dto) {
+        Board board = new Board();
+        board.setTitle(dto.getTitle());
+        board.setContent(dto.getContent());
+        board.setAuthor(dto.getAuthor());
+        return board;
     }
 }

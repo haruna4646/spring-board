@@ -16,12 +16,10 @@ public class ReplyService {
         this.replyRepository = replyRepository;
     }
 
-    // 特定の投稿に紐づく返信一覧を取得
     public List<Reply> findByBoardId(Long boardId) {
         return replyRepository.findByBoardId(boardId);
     }
 
-    // 返信を保存
     public void save(Reply reply) {
         replyRepository.save(reply);
     }

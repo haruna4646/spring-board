@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.Board;
+import com.example.demo.dto.BoardDto;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.ReplyService;
 
@@ -28,10 +28,11 @@ public class BoardController {
     // 一覧＋検索
     @GetMapping
     public String list(@RequestParam(required = false) String keyword, Model model) {
-        List<Board> boards =
-                (keyword == null || keyword.isEmpty())
-                        ? boardService.findAll()
-                        : boardService.search(keyword);
+
+    	List<BoardDto> boards =
+    	        (keyword == null || keyword.isEmpty())
+    	                ? boardService.findAll()
+    	                : boardService.search(keyword);
 
         model.addAttribute("boards", boards);
         return "board/list";
@@ -39,8 +40,8 @@ public class BoardController {
 
     // 投稿
     @PostMapping
-    public String create(Board board) {
-        boardService.save(board);
+    public String create(BoardDto boardDto) {
+        boardService.save(boardDto);
         return "redirect:/boards";
     }
 

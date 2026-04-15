@@ -1,52 +1,75 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "replies")
 public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String author;
+    // 投稿ID
+    @Column(nullable = false)
+    private Long boardId;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    // 返信者名（HTMLの name）
+    @Column(nullable = false)
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+    // メッセージ（HTMLの message）
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String message;
+
+    private LocalDateTime createdAt;
+
+    public Reply() {}
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
     // ===== getter / setter =====
 
-    public String getAuthor() {
-        return author;
+    public Long getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public Long getBoardId() {
+        return boardId;
     }
 
-    public String getContent() {
-        return content;
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getName() {
+        return name;
     }
 
-    public Board getBoard() {
-        return board;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
