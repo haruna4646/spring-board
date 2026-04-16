@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,30 +9,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.BoardDto;
 import com.example.demo.service.BoardService;
-import com.example.demo.service.ReplyService;
 
 @Controller
 @RequestMapping("/boards")
 public class BoardController {
 
     private final BoardService boardService;
-    private final ReplyService replyService;
 
-    public BoardController(BoardService boardService, ReplyService replyService) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
-        this.replyService = replyService;
     }
 
-    // 一覧＋検索
+    // 一覧表示
     @GetMapping
-    public String list(@RequestParam(required = false) String keyword, Model model) {
-
-    	List<BoardDto> boards =
-    	        (keyword == null || keyword.isEmpty())
-    	                ? boardService.findAll()
-    	                : boardService.search(keyword);
-
-        model.addAttribute("boards", boards);
+    public String list(Model model) {
+        model.addAttribute("boards", boardService.findAll());
         return "board/list";
     }
 

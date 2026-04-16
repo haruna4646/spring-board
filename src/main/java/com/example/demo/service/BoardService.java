@@ -17,6 +17,7 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
+    // 一覧取得
     public List<BoardDto> findAll() {
         return boardRepository.findAll()
                 .stream()
@@ -24,40 +25,38 @@ public class BoardService {
                 .toList();
     }
 
-    public List<BoardDto> search(String keyword) {
-        return boardRepository.findByTitleContaining(keyword)
-                .stream()
-                .map(this::toDto)
-                .toList();
-    }
-
+    // 保存
     public void save(BoardDto dto) {
         Board board = toEntity(dto);
         boardRepository.save(board);
     }
 
+    // 削除
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
 
-    // ===== 変換処理 =====
-
+    // ===== Entity → DTO =====
     private BoardDto toDto(Board board) {
         BoardDto dto = new BoardDto();
         dto.setId(board.getId());
-        dto.setTitle(board.getTitle());
-        dto.setContent(board.getContent());
-        dto.setAuthor(board.getAuthor());
+        dto.setName(board.getName());
+        dto.setEmail(board.getEmail());
+        dto.setSubject(board.getSubject());
+        dto.setMessage(board.getMessage());
+        dto.setDeleteKey(board.getDeleteKey());
         dto.setCreatedAt(board.getCreatedAt());
-        dto.setUpdatedAt(board.getUpdatedAt());
         return dto;
     }
 
+    // ===== DTO → Entity =====
     private Board toEntity(BoardDto dto) {
         Board board = new Board();
-        board.setTitle(dto.getTitle());
-        board.setContent(dto.getContent());
-        board.setAuthor(dto.getAuthor());
+        board.setName(dto.getName());
+        board.setEmail(dto.getEmail());
+        board.setSubject(dto.getSubject());
+        board.setMessage(dto.getMessage());
+        board.setDeleteKey(dto.getDeleteKey());
         return board;
     }
 }

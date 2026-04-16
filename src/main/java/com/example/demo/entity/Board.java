@@ -1,7 +1,14 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "boards")
@@ -11,44 +18,50 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    // 投稿者名
+    private String name;
 
+    // メール
+    private String email;
+
+    // 件名
+    private String subject;
+
+    // 本文
     @Column(columnDefinition = "TEXT")
-    private String content;
+    private String message;
 
-    private String author;
+    // 削除キー
+    private String deleteKey;
 
+    // 投稿日時
     private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
-
-    // コンストラクタ
     public Board() {}
 
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    // getter / setter
+    // ===== getter / setter =====
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+
+    public String getDeleteKey() { return deleteKey; }
+    public void setDeleteKey(String deleteKey) { this.deleteKey = deleteKey; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

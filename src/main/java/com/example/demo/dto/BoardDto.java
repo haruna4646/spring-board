@@ -1,39 +1,79 @@
 package com.example.demo.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class BoardDto {
 
     private Long id;
 
-    // 画面入力・表示用
-    private String title;
-    private String content;
-    private String author;
+    // 入力・表示用（input.html と完全一致）
+    private String name;
+    private String email;
+    private String subject;
+    private String message;
+    private String deleteKey;
 
-    // 表示用（登録・更新日時）
+    // 表示用
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    // コンストラクタ
-    public BoardDto() {}
+    // 返信一覧（表示用）
+    private List<ReplyDto> replies;
 
-    // getter / setter
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ===== getter / setter =====
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public String getSubject() {
+        return subject;
+    }
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getDeleteKey() {
+        return deleteKey;
+    }
+    public void setDeleteKey(String deleteKey) {
+        this.deleteKey = deleteKey;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<ReplyDto> getReplies() {
+        return replies;
+    }
+    public void setReplies(List<ReplyDto> replies) {
+        this.replies = replies;
+    }
 }
