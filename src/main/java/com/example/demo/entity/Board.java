@@ -1,12 +1,16 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -28,7 +32,6 @@ public class Board {
     private String subject;
 
     // 本文
-    @Column(columnDefinition = "TEXT")
     private String message;
 
     // 削除キー
@@ -36,6 +39,15 @@ public class Board {
 
     // 投稿日時
     private LocalDateTime createdAt;
+
+    // 返信一覧（1投稿 : 複数返信）
+    @OneToMany(
+        mappedBy = "board",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
+    private List<Reply> replies = new ArrayList<>();
 
     public Board() {}
 
@@ -45,8 +57,8 @@ public class Board {
     }
 
     // ===== getter / setter =====
+
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -64,4 +76,6 @@ public class Board {
     public void setDeleteKey(String deleteKey) { this.deleteKey = deleteKey; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public List<Reply> getReplies() { return replies; }
 }

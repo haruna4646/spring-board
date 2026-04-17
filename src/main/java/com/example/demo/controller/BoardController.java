@@ -1,43 +1,52 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.dto.BoardDto;
-import com.example.demo.service.BoardService;
+import com.example.demo.entity.Board;
+import com.example.demo.repository.BoardRepository;
 
 @Controller
 @RequestMapping("/boards")
 public class BoardController {
 
-    private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
+    // コンストラクタインジェクション
+    public BoardController(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
     }
 
-    // 一覧表示
+    /**
+     * 一覧表示（新着順）
+     * http://localhost:8080/boards
+     */
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("boards", boardService.findAll());
+        List<Board> boards = boardRepository.findAllByOrderByCreatedAtDesc();
+        model.addAttribute("boards", boards);
         return "board/list";
     }
 
-    // 投稿
-    @PostMapping
-    public String create(BoardDto boardDto) {
-        boardService.save(boardDto);
-        return "redirect:/boards";
-    }
+    /**
+     * 検索
+     * http://localhost:8080/boards/search?keyword=テスト
+     */
+    @GetMapping("/search")
+    public String search(
+            @RequestParam("keyword") String keyword,
+            Model model) {
 
-    // 削除
-    @PostMapping("/delete")
-    public String delete(@RequestParam Long id) {
-        boardService.delete(id);
-        return "redirect:/boards";
+        List<Board> boards =
+                boardRepository.findBySubjectContainingOrMessageContaining(keyword, keyword);
+
+        model.addAttribute("boards", boards);
+        model.addAttribute("keyword", keyword);
+        return "board/list";
     }
 }

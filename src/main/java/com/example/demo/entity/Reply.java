@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -18,15 +21,16 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 投稿ID
-    @Column(nullable = false)
-    private Long boardId;
+    // 投稿（Board）との関連
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
-    // 返信者名（HTMLの name）
+    // 返信者名
     @Column(nullable = false)
     private String name;
 
-    // メッセージ（HTMLの message）
+    // メッセージ
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
@@ -45,12 +49,12 @@ public class Reply {
         return id;
     }
 
-    public Long getBoardId() {
-        return boardId;
+    public Board getBoard() {
+        return board;
     }
 
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public String getName() {

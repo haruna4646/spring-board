@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>削除確認</title>
+</head>
+<body>
+<h2>削除確認</h2>
+
+<form th:action="@{/boards/delete}" method="post">
+    <p>この投稿を削除しますか？</p>
+
+    <div th:if="${hasDeleteKey}">
+        削除キー：
+        <input type="password" name="deleteKey">
+    </div>
+
+    <input type="hidden" name="id" th:value="${board.id}">
+
+    <input type="submit" value="削除">
+</form>
+
+<form th:action="@{/boards}" method="get">
+    <input type="submit" value="戻る">
+</form>
+</body>
+</html>

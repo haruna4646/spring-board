@@ -9,105 +9,83 @@
 <div class="wrapper">
     <h1>お悩み掲示板</h1>
 
-    <!-- 投稿フォーム -->
-    <form th:action="@{/boards}" method="post" class="confirmform">
-        <label>名前：</label>
-        <input type="text" name="name" th:value="${name}" required>
+    <!-- 🔍 検索フォーム -->
+    <form th:action="@{/boards/search}" method="get">
+        キーワード：
+        <input type="text" name="keyword" th:value="${keyword}">
+        メール：
+        <input type="text" name="email" th:value="${email}">
+        <input type="submit" value="検索">
+    </form>
 
-        <label>メール：</label>
-        <input type="email" name="email" th:value="${email}" required>
+    <hr>
 
-        <label>件名：</label>
-        <select name="subject" class="rajio" required>
+    <!-- 📝 投稿入力 -->
+    <form th:action="@{/boards/confirm}" method="post" th:object="${boardForm}">
+        <div th:if="${#fields.hasErrors('*')}">
+            <p th:each="e : ${#fields.errors('*')}" th:text="${e}"></p>
+        </div>
+
+        名前：<input type="text" th:field="*{name}"><br>
+        メール：<input type="email" th:field="*{email}"><br>
+
+        件名：
+        <select th:field="*{subject}">
             <option value="">選択してください</option>
             <option value="人生相談">人生相談</option>
             <option value="恋愛相談">恋愛相談</option>
             <option value="仕事の相談">仕事の相談</option>
             <option value="その他">その他</option>
-        </select>
+        </select><br>
 
-        <br>
+        本文：<br>
+        <textarea th:field="*{message}" rows="5"></textarea><br>
 
-        <label>メッセージ：</label>
-        <textarea name="message" rows="5" required></textarea>
+        削除キー：
+        <input type="password" th:field="*{deleteKey}"><br>
 
-        <label>削除キー（忘れないでください）：</label>
-        <input type="password" name="deleteKey">
-
-        <div class="btn-submit">
-            <input type="submit" value="投稿する" class="btn-small">
-            <input type="reset" value="リセット" class="btn-small">
-        </div>
+        <input type="submit" value="確認">
     </form>
 
     <hr>
 
-    <h2>投稿一覧</h2>
-
-    <!-- 投稿一覧 -->
+    <!-- 📄 投稿一覧 -->
     <div th:each="b : ${boards}" class="board">
         <strong>名前：</strong><span th:text="${b.name}"></span><br>
-
         <strong>日時：</strong>
-        <span th:text="${#temporals.format(b.createdAt, 'yyyy/MM/dd')}"></span><br>
-
+        <span th:text="${#temporals.format(b.createdAt,'yyyy/MM/dd')}"></span><br>
         <strong>件名：</strong><span th:text="${b.subject}"></span><br>
+        <p th:text="${b.message}"></p>
 
-        <strong>メッセージ：</strong><br>
-        <p class="message" th:text="${b.message}"></p>
-
-        <!-- 返信一覧 -->
+        <!-- 💬 返信一覧 -->
         <div th:each="r : ${b.replies}" class="reply">
             <strong>返信者：</strong><span th:text="${r.name}"></span><br>
-
-            <strong>メッセージ：</strong><br>
             <p th:text="${r.message}"></p>
-
-            <strong>日時：</strong>
-            <span th:text="${#temporals.format(r.createdAt, 'yyyy/MM/dd')}"></span><br>
         </div>
 
-        <!-- ボタン -->
-        <div class="btn-submit">
-            <button type="button"
-                    th:onclick="|toggleReplyForm(${b.id})|"
-                    class="btn-small">
-                返信する
-            </button>
+        <!-- 返信ボタン -->
+        <button type="button" th:onclick="|toggle(${b.id})|">返信</button>
 
-            <form th:action="@{/boards/delete}" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${b.id}">
-                <input type="submit" value="削除" class="btn-small">
-            </form>
-        </div>
+        <!-- 削除 -->
+        <a th:href="@{/boards/delete/{id}(id=${b.id})}">削除</a>
 
         <!-- 返信フォーム -->
-        <div th:id="'reply-form-' + ${b.id}" style="display:none; margin-top:10px;">
-            <form th:action="@{/replies}" method="post" class="reply-form">
+        <div th:id="'reply-' + ${b.id}" style="display:none;">
+            <form th:action="@{/replies}" method="post" th:object="${replyForm}">
                 <input type="hidden" name="boardId" th:value="${b.id}">
-
-                名前：<br>
-                <input type="text" name="name" required><br>
-
-                メッセージ：<br>
-                <textarea name="message" rows="3" cols="30" required></textarea>
-
-                <input type="submit" value="返信する" class="btn-small">
+                名前：<input type="text" th:field="*{name}"><br>
+                <textarea th:field="*{message}"></textarea><br>
+                <input type="submit" value="返信">
             </form>
         </div>
     </div>
-
-    <footer>
-        <p>掲示板アプリ - Java研修</p>
-    </footer>
 </div>
 
 <script>
-    function toggleReplyForm(boardId) {
-        const form = document.getElementById("reply-form-" + boardId);
-        form.style.display = (form.style.display === "none") ? "block" : "none";
-    }
+function toggle(id){
+    const el = document.getElementById("reply-" + id);
+    el.style.display = el.style.display === "none" ? "block" : "none";
+}
 </script>
-
 </body>
 </html>
