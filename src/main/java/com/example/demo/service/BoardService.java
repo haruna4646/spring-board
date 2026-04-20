@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.BoardDto;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.entity.Board;
+import com.example.demo.form.BoardForm;
 import com.example.demo.repository.BoardRepository;
 
 @Service
@@ -63,5 +64,20 @@ public class BoardService {
 
         dto.setReplies(replyDtos);
         return dto;
+    }
+    
+    public void create(BoardForm form) {
+        Board board = new Board();
+        board.setName(form.getName());
+        board.setEmail(form.getEmail());
+        board.setSubject(form.getSubject());
+        board.setMessage(form.getMessage());
+        board.setDeleteKey(form.getDeleteKey());
+
+        boardRepository.save(board);
+    }
+
+    public void delete(Long id) {
+        boardRepository.deleteById(id);
     }
 }

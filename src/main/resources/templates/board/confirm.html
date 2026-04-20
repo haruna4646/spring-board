@@ -8,19 +8,23 @@
 <h2>投稿確認</h2>
 
 <form th:action="@{/boards/create}" method="post">
-    名前：<span th:text="${boardForm.name}"></span><br>
-    メール：<span th:text="${boardForm.email}"></span><br>
-    件名：<span th:text="${boardForm.subject}"></span><br>
-    本文：<p th:text="${boardForm.message}"></p>
 
-    <!-- hidden引き継ぎ -->
-    <input type="hidden" name="name" th:value="${boardForm.name}">
-    <input type="hidden" name="email" th:value="${boardForm.email}">
-    <input type="hidden" name="subject" th:value="${boardForm.subject}">
-    <input type="hidden" name="message" th:value="${boardForm.message}">
-    <input type="hidden" name="deleteKey" th:value="${boardForm.deleteKey}">
+名前：<span th:text="${boardForm.name}"></span><br>
+メール：<span th:text="${boardForm.email}"></span><br>
+件名：<span th:text="${boardForm.subject}"></span><br>
+本文：<span th:text="${boardForm.message}"></span><br>
 
-    <input type="submit" value="投稿">
+<input type="hidden" name="name" th:value="${boardForm.name}">
+<input type="hidden" name="email" th:value="${boardForm.email}">
+<input type="hidden" name="subject" th:value="${boardForm.subject}">
+<input type="hidden" name="message" th:value="${boardForm.message}">
+<input type="hidden" name="deleteKey" th:value="${boardForm.deleteKey}">
+
+<input type="submit" value="投稿">
+</form>
+
+<form th:action="@{/boards}" method="get">
+    <input type="submit" value="戻る">
 </form>
 
 <form th:action="@{/boards}" method="get">
