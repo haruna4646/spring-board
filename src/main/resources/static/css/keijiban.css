@@ -1,0 +1,176 @@
+@charset "UTF-8";
+/* =========================
+   ベース
+========================= */
+body {
+    background: #faf6f8;
+    font-family: "MS PGothic", "Hiragino Maru Gothic ProN", "Meiryo", sans-serif;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* =========================
+   全体レイアウト
+========================= */
+.wrapper {
+    width: 750px;
+    margin: 20px auto;
+}
+
+/* =========================
+   タイトル
+========================= */
+h1 {
+    color: #c96b86;
+    text-align: center;
+    border-bottom: 2px solid #f2a7bb;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   区切り線
+========================= */
+hr {
+    border: none;
+    border-top: 1px solid #f2a7bb;
+    margin: 15px 0;
+}
+
+/* =========================
+   検索ボックス
+========================= */
+.search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #fff0f5;
+    padding: 10px;
+    border: 1px solid #f2a7bb;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+/* =========================
+   投稿フォーム（横並び）
+========================= */
+.form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    height: 32px;
+}
+
+.form-row .field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+}
+
+/* =========================
+   入力系（統一）
+========================= */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    border: 1px solid #f2a7bb;
+    border-radius: 6px;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    outline: none;
+    background: #fff;
+}
+
+input[type="text"],
+input[type="email"],
+select{
+	max-width: 300px;
+}
+
+/* 本文をちゃんと主役に */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* =========================
+   投稿枠
+========================= */
+.board {
+    background: #fff;
+    border: 1px solid #f2a7bb;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+}
+
+/* =========================
+   返信
+========================= */
+.reply {
+    margin-top: 12px;
+    margin-left: 15px;
+    padding: 8px;
+    border-left: 3px solid #f2a7bb;
+    background: #fff7fa;
+}
+
+/* =========================
+   ボタン統一（完全同サイズ化）
+========================= */
+button,
+input[type="submit"],
+a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 32px;
+    padding: 0 12px;
+
+    background: #e88aa5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+/* hover */
+button:hover,
+input[type="submit"]:hover,
+a.button:hover {
+    background: #d96f8d;
+}
+
+/* =========================
+   返信フォーム
+========================= */
+.reply-form {
+    margin-top: 15px;
+}
+
+.reply-form textarea {
+    margin-bottom: 8px;
+}
+
+/* =========================
+   細かい見た目調整
+========================= */
+strong {
+    color: #c96b86;
+}
+
+p {
+    margin: 6px 0;
+}
+
+input[type="password"]{
+	margin-bottom: 10px;
+}
+}

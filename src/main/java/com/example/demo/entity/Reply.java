@@ -21,26 +21,28 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 投稿（Board）との関連
+    // 紐づく投稿
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     // 返信者名
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    // メッセージ
+    // 返信本文
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    // 投稿日時
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public Reply() {}
 
     @PrePersist
     public void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     // ===== getter / setter =====

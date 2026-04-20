@@ -1,26 +1,39 @@
 package com.example.demo.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Board;
 import com.example.demo.entity.Reply;
+import com.example.demo.form.ReplyForm;
+import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.ReplyRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
 
-    public ReplyService(ReplyRepository replyRepository) {
+    public ReplyService(
+            ReplyRepository replyRepository,
+            BoardRepository boardRepository) {
         this.replyRepository = replyRepository;
+        this.boardRepository = boardRepository;
     }
 
-    public List<Reply> findByBoardId(Long boardId) {
-        return replyRepository.findByBoardId(boardId);
-    }
+    // 返信投稿
+    @Transactional
+    public void create(ReplyForm form) {
+        Board board = boardRepository.findById(form.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("投稿が存在しません"));
 
-    public void save(Reply reply) {
+        Reply reply = new Reply();
+        reply.setBoard(board);
+        reply.setName(form.getName());
+        reply.setMessage(form.getMessage());
+
         replyRepository.save(reply);
     }
 }
