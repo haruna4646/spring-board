@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="UTF-8">
+	    <title>削除確認</title>
+	    <link rel="stylesheet" th:href="@{/css/keijiban.css}">
+	</head>
+	<body>
+	<div class="wrapper">
+	
+	    <h1>投稿削除</h1>
+	
+	    <div class="board">
+	        <p><strong>名前：</strong><span th:text="${board.name}"></span></p>
+	        <p><strong>件名：</strong><span th:text="${board.subject}"></span></p>
+	        <p th:text="${board.message}"></p>
+	    </div>
+	
+	    <form th:action="@{/boards/delete/execute}" method="post">
+	        <input type="hidden" name="id" th:value="${board.id}">
+	
+	        <div class="field">
+	            <label>削除キー</label>
+	            <input type="password" name="deleteKey">
+	        </div>
+	
+	        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+	
+	        <div class="btn-area">
+	            <input type="submit" value="削除する">
+	        </div>
+	    </form>
+	
+	    <div class="btn-area">
+	        <a th:href="@{/boards}" class="button">戻る</a>
+	    </div>
+	
+	</div>
+	</body>
+</html>

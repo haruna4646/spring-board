@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>投稿確認</title>
+    <meta charset="UTF-8">
+    <title>投稿確認</title>
+    <link rel="stylesheet" th:href="@{/css/keijiban.css}">
 </head>
+
 <body>
-<h2>投稿確認</h2>
+<div class="wrapper">
 
-<form th:action="@{/boards/create}" method="post">
+    <h1>投稿確認</h1>
 
-名前：<span th:text="${boardForm.name}"></span><br>
-メール：<span th:text="${boardForm.email}"></span><br>
-件名：<span th:text="${boardForm.subject}"></span><br>
-本文：<span th:text="${boardForm.message}"></span><br>
+    <div class="board">
+        <p><strong>名前：</strong><span th:text="${boardForm.name}"></span></p>
+        <p><strong>メール：</strong><span th:text="${boardForm.email}"></span></p>
+        <p><strong>件名：</strong><span th:text="${boardForm.subject}"></span></p>
+        <p><strong>本文：</strong></p>
+        <p th:text="${boardForm.message}"></p>
+    </div>
 
-<input type="hidden" name="name" th:value="${boardForm.name}">
-<input type="hidden" name="email" th:value="${boardForm.email}">
-<input type="hidden" name="subject" th:value="${boardForm.subject}">
-<input type="hidden" name="message" th:value="${boardForm.message}">
-<input type="hidden" name="deleteKey" th:value="${boardForm.deleteKey}">
+    <div class="btn">
+        <form th:action="@{/boards/create}" method="post" style="display:inline;">
+            <input type="hidden" name="name" th:value="${boardForm.name}">
+            <input type="hidden" name="email" th:value="${boardForm.email}">
+            <input type="hidden" name="subject" th:value="${boardForm.subject}">
+            <input type="hidden" name="message" th:value="${boardForm.message}">
+            <input type="hidden" name="deleteKey" th:value="${boardForm.deleteKey}">
+            <input type="submit" value="投稿">
+        </form>
 
-<input type="submit" value="投稿">
-</form>
+        <form th:action="@{/boards}" method="get" style="display:inline;">
+            <input type="submit" value="戻る">
+        </form>
+    </div>
 
-<form th:action="@{/boards}" method="get">
-    <input type="submit" value="戻る">
-</form>
-
-<form th:action="@{/boards}" method="get">
-    <input type="submit" value="戻る">
-</form>
+</div>
 </body>
 </html>

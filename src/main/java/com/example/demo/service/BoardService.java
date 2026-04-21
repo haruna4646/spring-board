@@ -8,9 +8,13 @@ import com.example.demo.dto.BoardDto;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.entity.Board;
 import com.example.demo.form.BoardForm;
+import com.example.demo.form.BoardSearchForm;
 import com.example.demo.repository.BoardRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -19,7 +23,7 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    // 一覧取得（新着順）
+    // 一覧
     public List<BoardDto> findAll() {
         return boardRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
@@ -27,9 +31,12 @@ public class BoardService {
                 .toList();
     }
 
-    // 検索
-    public List<BoardDto> search(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
+    // 検索（keyword）
+    public List<BoardDto> search(BoardSearchForm form) {
+
+        String keyword = emptyToNull(form.getKeyword());
+
+        if (keyword == null) {
             return findAll();
         }
 
@@ -40,32 +47,18 @@ public class BoardService {
                 .toList();
     }
 
-    // Entity → DTO
-    private BoardDto toDto(Board board) {
-        BoardDto dto = new BoardDto();
-        dto.setId(board.getId());
-        dto.setName(board.getName());
-        dto.setSubject(board.getSubject());
-        dto.setMessage(board.getMessage());
-        dto.setCreatedAt(board.getCreatedAt());
-        
-
-        List<ReplyDto> replyDtos = board.getReplies().stream()
-                .map(r -> {
-                    ReplyDto rd = new ReplyDto();
-                    rd.setId(r.getId());
-                    rd.setBoardId(board.getId());
-                    rd.setName(r.getName());
-                    rd.setMessage(r.getMessage());
-                    rd.setCreatedAt(r.getCreatedAt());
-                    return rd;
-                })
-                .toList();
-
-        dto.setReplies(replyDtos);
-        return dto;
+    private String emptyToNull(String value) {
+        return (value == null || value.isBlank()) ? null : value;
     }
-    
+
+    // 投稿取得
+    public BoardDto getBoard(Long id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow();
+        return toDto(board);
+    }
+
+    // 作成
     public void create(BoardForm form) {
         Board board = new Board();
         board.setName(form.getName());
@@ -77,7 +70,48 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void delete(Long id) {
-        boardRepository.deleteById(id);
+    // 削除
+    public boolean delete(Long id, String deleteKey) {
+
+        Board board = boardRepository.findById(id)
+                .orElse(null);
+
+        if (board == null) return false;
+
+        String storedKey = board.getDeleteKey();
+
+        if (storedKey != null) {
+            if (deleteKey == null || !storedKey.equals(deleteKey)) {
+                return false;
+            }
+        }
+
+        boardRepository.delete(board);
+        return true;
+    }
+
+    // DTO変換
+    private BoardDto toDto(Board board) {
+
+        BoardDto dto = new BoardDto();
+        dto.setId(board.getId());
+        dto.setName(board.getName());
+        dto.setSubject(board.getSubject());
+        dto.setMessage(board.getMessage());
+        dto.setCreatedAt(board.getCreatedAt());
+
+        dto.setReplies(
+            board.getReplies().stream().map(r -> {
+                ReplyDto rd = new ReplyDto();
+                rd.setId(r.getId());
+                rd.setBoardId(board.getId());
+                rd.setName(r.getName());
+                rd.setMessage(r.getMessage());
+                rd.setCreatedAt(r.getCreatedAt());
+                return rd;
+            }).toList()
+        );
+
+        return dto;
     }
 }

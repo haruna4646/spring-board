@@ -27,7 +27,7 @@ public class ReplyService {
     @Transactional
     public void create(ReplyForm form) {
         Board board = boardRepository.findById(form.getBoardId())
-                .orElseThrow(() -> new IllegalArgumentException("投稿が存在しません"));
+                .orElseThrow();
 
         Reply reply = new Reply();
         reply.setBoard(board);
