@@ -41,7 +41,8 @@ public class BoardService {
         }
 
         return boardRepository
-                .findBySubjectContainingOrMessageContainingOrNameContaining(keyword, keyword, keyword)
+                .findBySubjectContainingOrMessageContainingOrNameContaining(
+                        keyword, keyword, keyword)
                 .stream()
                 .map(this::toDto)
                 .toList();
